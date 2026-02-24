@@ -1279,6 +1279,12 @@
 
 -- 1. Create a SECURITY DEFINER function so the browser can
 --    insert user_roles rows without being blocked by RLS.
+-- Add unique constraint first (needed for ON CONFLICT to work)
+ALTER TABLE public.user_roles
+    DROP CONSTRAINT IF EXISTS user_roles_user_id_school_id_key;
+ALTER TABLE public.user_roles
+    ADD CONSTRAINT user_roles_user_id_school_id_key UNIQUE (user_id, school_id);
+
 CREATE OR REPLACE FUNCTION public.insert_user_role(
     p_user_id   uuid,
     p_school_id uuid,
