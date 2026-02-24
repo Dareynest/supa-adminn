@@ -1211,7 +1211,7 @@
                 const { error: rpcErr } = await supabaseClient.rpc('insert_user_role', {
                     p_user_id:   adminUserId,
                     p_school_id: schoolId,
-                    p_role:      'school_admin'
+                    p_role:      'admin'
                 });
 
                 if (rpcErr) {
@@ -1222,7 +1222,7 @@
                         .insert({
                             user_id:    adminUserId,
                             school_id:  schoolId,
-                            role:       'school_admin',
+                            role:       'admin',
                             created_at: new Date().toISOString()
                         });
                     roleInsertError = directErr || null;
@@ -1311,10 +1311,10 @@ INSERT INTO public.user_roles (user_id, school_id, role, created_at)
 VALUES (
     '${adminUserId}',
     '${schoolId}',
-    'school_admin',
+    'admin',
     now()
 )
-ON CONFLICT (user_id, school_id) DO UPDATE SET role = 'school_admin';`;
+ON CONFLICT (user_id, school_id) DO UPDATE SET role = 'admin';`;
 
             const existing = document.getElementById('role-fix-modal');
             if (existing) existing.remove();
@@ -1360,7 +1360,7 @@ INSERT INTO public.user_roles (user_id, school_id, role, created_at)
 VALUES (
   '${adminUserId}',
   '${schoolId}',
-  'school_admin',
+  'admin',
   now()
 );`;
 
@@ -1595,7 +1595,7 @@ VALUES (
                 try {
                     // Get admin user_id BEFORE deleting user_roles
                     const { data: adminRole } = await supabaseClient
-                        .from('user_roles').select('user_id').eq('school_id', schoolId).eq('role', 'school_admin').single();
+                        .from('user_roles').select('user_id').eq('school_id', schoolId).eq('role', 'admin').single();
                     const adminUserId = adminRole?.user_id || null;
 
                     // Delete all school data across every table the school app writes to
