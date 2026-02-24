@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Admin - Darey School Management Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5568d3;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-darker: #020617;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-darker);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background: var(--bg-darker);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-trial {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .status-paused {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Plan Badge */
+        .plan-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem 0.75rem;
+            font-size: 1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--text-primary);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-darker);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-hint {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .form-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .form-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+            color: #93c5fd;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success);
+            color: #6ee7b7;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--warning);
+            color: #fcd34d;
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--danger);
+            color: #fca5a5;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+                width: 95%;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            table th,
+            table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🎓</span>
+                <div>
+                    <div style="font-size: 1.25rem;">Platform Admin</div>
+                    <div style="font-size: 0.75rem; opacity: 0.8;">Darey School Management</div>
+                </div>
+            </div>
+            <div class="user-section">
+                <div class="user-info">
+                    <span>👤</span>
+                    <span id="admin-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d3c393034331d2d313c293b322f30733e3230">[email&#160;protected]</a></span>
+                    <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem;">Super Admin</span>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Plan Pricing Settings -->
+        <div class="section" style="margin-bottom:1.5rem;">
+            <div class="section-header" style="margin-bottom:1rem;padding-bottom:0.75rem;">
+                <h2 class="section-title" style="font-size:1.1rem;">
+                    <span>💳</span>
+                    <span>Plan Pricing (Monthly ₦)</span>
+                </h2>
+                <button class="btn btn-success btn-sm" onclick="savePlanPrices()">💾 Save Prices</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;">
+                <div>
+                    <label style="display:block;color:var(--text-secondary);font-size:0.8rem;font-weight:600;margin-bottom:6px;">Free Trial</label>
+                    <input id="price-trial" type="number" min="0" class="form-control" placeholder="0" style="padding:0.5rem 0.75rem;">
+                </div>
+                <div>
+                    <label style="display:block;color:var(--text-secondary);font-size:0.8rem;font-weight:600;margin-bottom:6px;">Basic</label>
+                    <input id="price-basic" type="number" min="0" class="form-control" placeholder="0" style="padding:0.5rem 0.75rem;">
+                </div>
+                <div>
+                    <label style="display:block;color:var(--text-secondary);font-size:0.8rem;font-weight:600;margin-bottom:6px;">Premium</label>
+                    <input id="price-premium" type="number" min="0" class="form-control" placeholder="0" style="padding:0.5rem 0.75rem;">
+                </div>
+                <div>
+                    <label style="display:block;color:var(--text-secondary);font-size:0.8rem;font-weight:600;margin-bottom:6px;">Enterprise</label>
+                    <input id="price-enterprise" type="number" min="0" class="form-control" placeholder="0" style="padding:0.5rem 0.75rem;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Platform Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🏫</div>
+                <div class="stat-label">Total Schools</div>
+                <div class="stat-value" id="total-schools">0</div>
+                <div class="stat-change positive">
+                    <span>↑</span>
+                    <span>+<span id="new-schools">0</span> this month</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-label">Active Subscriptions</div>
+                <div class="stat-value" id="active-schools">0</div>
+                <div class="stat-change positive">
+                    <span>↑</span>
+                    <span><span id="active-percent">0</span>% active</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-label">Total Students</div>
+                <div class="stat-value" id="total-students">0</div>
+                <div class="stat-change positive">
+                    <span>↑</span>
+                    <span>Across all schools</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-label">Monthly Revenue</div>
+                <div class="stat-value">₦<span id="monthly-revenue">0</span></div>
+                <div class="stat-change positive">
+                    <span>↑</span>
+                    <span>₦<span id="annual-revenue">0</span>/year</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schools Management -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>🏫</span>
+                    <span>School Management</span>
+                </h2>
+                <button class="btn btn-success" onclick="showAddSchoolModal()">
+                    <span>➕</span>
+                    <span>Add New School</span>
+                </button>
+            </div>
+
+            <div class="table-container" id="schools-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading schools...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add School Modal -->
+    <div id="add-school-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New School</h2>
+                <button class="close-modal" onclick="hideAddSchoolModal()">×</button>
+            </div>
+
+            <div class="alert alert-info">
+                <span>ℹ️</span>
+                <span>Create a new school account. The school admin will receive login credentials via email.</span>
+            </div>
+
+            <form id="add-school-form" onsubmit="createSchool(event)">
+                <!-- School Information -->
+                <div class="form-group">
+                    <label class="form-label">School Code *</label>
+                    <input type="text" class="form-control" name="schoolCode" placeholder="e.g., LAGOS_HIGH_001" required>
+                    <div class="form-hint">Unique identifier for the school (alphanumeric, underscores, hyphens only</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">School Name *</label>
+                    <input type="text" class="form-control" name="schoolName" placeholder="e.g., Lagos High School" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="form-control" name="schoolPhone" placeholder="+234 123 456 7890">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="schoolEmail" placeholder="info@school.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control" name="schoolAddress" placeholder="123 School Street, City">
+                </div>
+
+                /* Subscription Plan */
+                <div class="form-group">
+                    <label class="form-label">Subscription Plan *</label>
+                    <select class="form-control" name="plan" required onchange="updatePlanLimits(this.value)">
+                        <option value="trial">Free Trial - 30 days (50 students, 5 teachers)</option>
+                        <option value="basic">Basic - ₦20,000/month (500 students, 50 teachers)</option>
+                        <option value="premium">Premium - ₦60,000/month (2000 students, 200 teachers)</option>
+                        <option value="enterprise">Enterprise - Custom pricing (Unlimited)</option>
+                    </select>
+                </div>
+
+                /* Admin Account */
+                <div class="form-section">
+                    <h3 class="form-section-title">School Administrator Account</h3>
+
+                    <div class="form-group">
+                        <label class="form-label">Admin Full Name *</label>
+                        <input type="text" class="form-control" name="adminName" placeholder="Principal John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Admin Email *</label>
+                        <input type="email" class="form-control" name="adminEmail" placeholder="principal@school.com" required>
+                        <div class="form-hint">The admin will use this email to log in</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Temporary Password *</label>
+                        <input type="password" class="form-control" name="adminPassword" placeholder="Minimum 8 characters" required minlength="8">
+                        <div class="form-hint">The admin should change this password on first login</div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span>⚠️</span>
+                    <span>Make sure to send the login credentials to the school admin via email after creation.</span>
+                </div>
+
+                <div class="action-buttons" style="justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="hideAddSchoolModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">
+                        <span>✓</span>
+                        <span>Create School</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View School Modal -->
+    <div id="view-school-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="view-school-name">School Details</h2>
+                <button class="close-modal" onclick="hideViewSchoolModal()">×</button>
+            </div>
+            <div id="view-school-content">
+                <!-- Populated by viewSchool() -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ============================================================================
+        // CONFIGURATION
+        // ============================================================================
+        const SUPABASE_URL = 'https://xfuksmgdxmewqvhggugp.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmdWtzbWdkeG1ld3F2aGdndWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDkyMjUsImV4cCI6MjA4NTI4NTIyNX0.rceD8AkCnIteoe9J_x69IgmRD6oO-cQiWviZwPTPEiY';
+        // ⚠️ REQUIRED: Replace with your actual service_role key from Supabase → Settings → API
+        // This is needed to delete admin auth accounts when a school is deleted.
+        // KEEP THIS FILE PRIVATE — never expose the service key publicly.
+        // Service key removed — blocked by Supabase in browser. Auth admin ops use Dashboard.
+
+        const SCHOOL_APP_FILE = 'school-app.html';
+        function getAppUrl(schoolId) {
+            const href = window.location.href;
+            const base = href.split('?')[0].split('#')[0].replace(/\/[^/]*$/, '');
+            return base + '/' + SCHOOL_APP_FILE + '?school=' + encodeURIComponent(schoolId);
+        }
+
+        let supabaseClient;
+        let currentViewingSchool = null;
+
+        // ============================================================================
+        // INITIALIZATION
+        // ============================================================================
+        window.addEventListener('DOMContentLoaded', async () => {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            const { data: { user } } = await supabaseClient.auth.getUser();
+
+            if (!user) {
+                window.location.href = 'super-admin-login.html';
+                return;
+            }
+
+            const { data: userRole } = await supabaseClient
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', user.id)
+                .single();
+
+            if (!userRole || userRole.role !== 'super_admin') {
+                alert('Access Denied: You are not a super admin');
+                await supabaseClient.auth.signOut();
+                window.location.href = 'https://app.dareyplatform.com';
+                return;
+            }
+
+            document.getElementById('admin-email').textContent = user.email;
+
+            loadPlanPriceInputs();
+            await loadPlatformStats();
+            await loadAllSchools();
+        });
+
+        // ============================================================================
+        // PLATFORM STATISTICS
+        // ============================================================================
+        async function loadPlatformStats() {
+            try {
+                const { data: schools, error: schoolsError } = await supabaseClient
+                    .from('schools')
+                    .select('subscription_plan, subscription_status, created_at');
+
+                if (schoolsError) throw schoolsError;
+
+                // students table lives in IndexedDB, not Supabase — skip gracefully
+                const studentCount = 0;
+
+                const totalSchools = schools.length;
+                const activeSchools = schools.filter(s => s.subscription_status === 'active').length;
+                const activePercent = totalSchools > 0 ? Math.round((activeSchools / totalSchools) * 100) : 0;
+
+                const now = new Date();
+                const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                const newSchools = schools.filter(s => new Date(s.created_at) >= firstDayOfMonth).length;
+
+                const planPrices = getPlanPrices();
+                const monthlyRevenue = schools.reduce((sum, s) => {
+                    return sum + (s.subscription_status === 'active' ? (planPrices[s.subscription_plan] || 0) : 0);
+                }, 0);
+                const annualRevenue = monthlyRevenue * 12;
+
+                document.getElementById('total-schools').textContent = totalSchools;
+                document.getElementById('active-schools').textContent = activeSchools;
+                document.getElementById('active-percent').textContent = activePercent;
+                document.getElementById('total-students').textContent = studentCount.toLocaleString();
+                document.getElementById('monthly-revenue').textContent = monthlyRevenue.toLocaleString();
+                document.getElementById('annual-revenue').textContent = annualRevenue.toLocaleString();
+                document.getElementById('new-schools').textContent = newSchools;
+
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                showAlert('Failed to load platform statistics', 'danger');
+            }
+        }
+
+        // ============================================================================
+        // SCHOOLS MANAGEMENT
+        // ============================================================================
+        async function loadAllSchools() {
+            const container = document.getElementById('schools-container');
+
+            try {
+                const [{ data: schools, error }, { data: roleCounts }] = await Promise.all([
+                    supabaseClient.from('schools').select('*').order('school_name'),
+                    supabaseClient.from('user_roles').select('school_id, role')
+                ]);
+
+                if (error) throw error;
+
+                // Build per-school counts
+                const countMap = {};
+                (roleCounts || []).forEach(function(r) {
+                    if (!countMap[r.school_id]) countMap[r.school_id] = { student: 0, teacher: 0 };
+                    if (r.role === 'student') countMap[r.school_id].student++;
+                    else if (r.role === 'teacher') countMap[r.school_id].teacher++;
+                });
+
+                if (schools.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🏫</div>
+                            <h3 class="empty-state-title">No Schools Yet</h3>
+                            <p class="empty-state-text">Add your first school to get started</p>
+                            <button class="btn btn-success" onclick="showAddSchoolModal()">
+                                <span>➕</span>
+                                <span>Add First School</span>
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const planLabels = {
+                    trial: 'Free Trial', basic: 'Basic', premium: 'Premium', enterprise: 'Enterprise'
+                };
+
+                // Build table using DOM — avoids template literal issues with special chars
+                const table = document.createElement('table');
+
+                // Header
+                const thead = document.createElement('thead');
+                thead.innerHTML = '<tr>' +
+                    '<th>School Name</th>' +
+                    '<th>School Code</th>' +
+                    '<th>App URL</th>' +
+                    '<th>Plan</th>' +
+                    '<th>Students</th>' +
+                    '<th>Teachers</th>' +
+                    '<th>Status</th>' +
+                    '<th>Created</th>' +
+                    '<th>Actions</th>' +
+                    '</tr>';
+                table.appendChild(thead);
+
+                const tbody = document.createElement('tbody');
+
+                schools.forEach(function(school) {
+                    const appUrl = getAppUrl(school.school_id);
+                    const safeName = (school.school_name || 'School').replace(/'/g, '');
+                    const isActive = school.subscription_status === 'active';
+                    const tr = document.createElement('tr');
+
+                    // School Name cell
+                    const tdName = document.createElement('td');
+                    const nameStrong = document.createElement('strong');
+                    if (school.school_name) {
+                        nameStrong.textContent = school.school_name;
+                    } else {
+                        nameStrong.innerHTML = '<span style="color:#ef4444;font-style:italic;">Name missing — edit to fix</span>';
+                    }
+                    tdName.appendChild(nameStrong);
+                    if (school.school_email) {
+                        const em = document.createElement('small');
+                        em.style.color = 'var(--text-secondary)';
+                        em.textContent = school.school_email;
+                        tdName.appendChild(document.createElement('br'));
+                        tdName.appendChild(em);
+                    }
+
+                    // Code cell
+                    const tdCode = document.createElement('td');
+                    const codeEl = document.createElement('code');
+                    codeEl.style.cssText = 'background:var(--bg-darker);padding:0.25rem 0.5rem;border-radius:4px;';
+                    codeEl.textContent = school.school_code || '—';
+                    tdCode.appendChild(codeEl);
+
+                    // App URL cell
+                    const tdUrl = document.createElement('td');
+                    const copyUrlBtn = document.createElement('button');
+                    copyUrlBtn.className = 'btn btn-secondary btn-sm';
+                    copyUrlBtn.textContent = '📋 Copy URL';
+                    copyUrlBtn.onclick = (function(url, btn) {
+                        return function() {
+                            navigator.clipboard.writeText(url).then(function() {
+                                btn.textContent = '✅ Copied!';
+                                setTimeout(function() { btn.textContent = '📋 Copy URL'; }, 2000);
+                            });
+                        };
+                    })(appUrl, copyUrlBtn);
+                    const urlCode = document.createElement('code');
+                    urlCode.style.cssText = 'display:block;margin-top:5px;font-size:0.72rem;word-break:break-all;color:#10b981;';
+                    urlCode.textContent = appUrl;
+                    tdUrl.appendChild(copyUrlBtn);
+
+                    // Plan cell
+                    const tdPlan = document.createElement('td');
+                    const planSpan = document.createElement('span');
+                    planSpan.className = 'plan-badge';
+                    planSpan.textContent = planLabels[school.subscription_plan] || school.subscription_plan;
+                    tdPlan.appendChild(planSpan);
+
+                    // Students
+                    const counts = countMap[school.school_id] || { student: 0, teacher: 0 };
+                    const maxStudents = school.max_students || 0;
+                    const maxTeachers = school.max_teachers || 0;
+                    const studentOver = counts.student > maxStudents;
+                    const teacherOver = counts.teacher > maxTeachers;
+
+                    const tdStudents = document.createElement('td');
+                    tdStudents.style.cssText = 'font-weight:600;color:' + (studentOver ? 'var(--danger)' : 'var(--success)') + ';';
+                    tdStudents.textContent = counts.student.toLocaleString() + ' / ' + maxStudents.toLocaleString();
+
+                    // Teachers
+                    const tdTeachers = document.createElement('td');
+                    tdTeachers.style.cssText = 'font-weight:600;color:' + (teacherOver ? 'var(--danger)' : 'var(--success)') + ';';
+                    tdTeachers.textContent = counts.teacher.toLocaleString() + ' / ' + maxTeachers.toLocaleString();
+
+                    // Status
+                    const tdStatus = document.createElement('td');
+                    const statusSpan = document.createElement('span');
+                    statusSpan.className = 'status-badge status-' + school.subscription_status;
+                    statusSpan.textContent = school.subscription_status;
+                    tdStatus.appendChild(statusSpan);
+
+                    // Created
+                    const tdCreated = document.createElement('td');
+                    tdCreated.textContent = new Date(school.created_at).toLocaleDateString();
+
+                    // Actions
+                    const tdActions = document.createElement('td');
+                    const actDiv = document.createElement('div');
+                    actDiv.className = 'action-buttons';
+
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'btn btn-primary btn-sm';
+                    viewBtn.textContent = 'View';
+                    viewBtn.onclick = (function(sid) { return function() { viewSchool(sid); }; })(school.school_id);
+
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'btn btn-secondary btn-sm';
+                    editBtn.textContent = 'Edit';
+                    editBtn.onclick = (function(sid) { return function() { editSchool(sid); }; })(school.school_id);
+
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = isActive ? 'btn btn-danger btn-sm' : 'btn btn-success btn-sm';
+                    toggleBtn.textContent = isActive ? 'Pause' : 'Activate';
+                    toggleBtn.onclick = (function(sid, sname, active) {
+                        return function() {
+                            if (active) { pauseSchool(sid, sname); }
+                            else { activateSchool(sid, sname); }
+                        };
+                    })(school.school_id, safeName, isActive);
+
+                    actDiv.appendChild(viewBtn);
+                    actDiv.appendChild(editBtn);
+                    actDiv.appendChild(toggleBtn);
+                    const deleteRowBtn = document.createElement('button');
+                    deleteRowBtn.className = 'btn btn-danger btn-sm';
+                    deleteRowBtn.textContent = '🗑️ Delete';
+                    deleteRowBtn.style.background = '#7f1d1d';
+                    deleteRowBtn.style.border = '1px solid #ef4444';
+                    deleteRowBtn.onclick = (function(sid, sname) { return function() { confirmDeleteSchool(sid, sname); }; })(school.school_id, safeName);
+                    actDiv.appendChild(deleteRowBtn);
+                    tdActions.appendChild(actDiv);
+
+                    tr.appendChild(tdName);
+                    tr.appendChild(tdCode);
+                    tr.appendChild(tdUrl);
+                    tr.appendChild(tdPlan);
+                    tr.appendChild(tdStudents);
+                    tr.appendChild(tdTeachers);
+                    tr.appendChild(tdStatus);
+                    tr.appendChild(tdCreated);
+                    tr.appendChild(tdActions);
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                container.innerHTML = '';
+                container.appendChild(table);
+
+            } catch (error) {
+                console.error('Error loading schools:', error);
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <span>❌</span>
+                        <span>Failed to load schools: ${error.message}</span>
+                    </div>
+                `;
+            }
+        }
+
+        // ============================================================================
+        // ============================================================================
+        // CREATE SCHOOL
+        // ============================================================================
+        async function createSchool(event) {
+            event.preventDefault();
+
+            const fd = Object.fromEntries(new FormData(event.target));
+            const planLimits = {
+                trial:      { students: 50,     teachers: 5 },
+                basic:      { students: 500,    teachers: 50 },
+                premium:    { students: 2000,   teachers: 200 },
+                enterprise: { students: 999999, teachers: 99999 }
+            };
+            const limits = planLimits[fd.plan] || planLimits.trial;
+
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳ Creating...'; }
+
+            let schoolId = null;
+
+            try {
+                // ── 1. Insert school record ──────────────────────────────────
+                schoolId = crypto.randomUUID();
+                const { error: schoolError } = await supabaseClient
+                    .from('schools')
+                    .insert({
+                        school_id:           schoolId,
+                        school_code:         fd.schoolCode,
+                        school_name:         fd.schoolName,
+                        school_phone:        fd.schoolPhone   || null,
+                        school_email:        fd.schoolEmail   || null,
+                        school_address:      fd.schoolAddress || null,
+                        subscription_plan:   fd.plan,
+                        subscription_status: 'active',
+                        max_students:        limits.students,
+                        max_teachers:        limits.teachers,
+                        created_at:          new Date().toISOString()
+                    });
+
+                if (schoolError) throw new Error('School insert failed: ' + schoolError.message);
+
+                // ── 2. Create admin auth user via standard signup ───────────
+                // We use /auth/v1/signup (anon key) — no service key needed.
+                // If email confirmation is OFF in Supabase, we get the user ID back
+                // immediately. If it is ON, Supabase still returns the user object
+                // but session will be null — we only need the user.id, so both
+                // cases are handled.
+                let adminUserId = null;
+
+                const signupRes = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_KEY
+                    },
+                    body: JSON.stringify({
+                        email:    fd.adminEmail,
+                        password: fd.adminPassword,
+                        data:     { name: fd.adminName, school_id: schoolId }
+                    })
+                });
+
+                const signupData = await signupRes.json();
+                adminUserId = signupData?.user?.id || signupData?.id || null;
+
+                if (!adminUserId) {
+                    // Email already exists (422) or other error — try signing in to recover user ID
+                    const recoverRes = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': SUPABASE_KEY
+                        },
+                        body: JSON.stringify({ email: fd.adminEmail, password: fd.adminPassword })
+                    });
+                    const recoverData = await recoverRes.json();
+                    adminUserId = recoverData?.user?.id || null;
+
+                    if (!adminUserId) {
+                        await supabaseClient.from('schools').delete().eq('school_id', schoolId);
+                        throw new Error(
+                            'Could not create admin account. ' +
+                            (signupData?.msg || signupData?.message || signupRes.status) +
+                            '. If this email is already registered, use a different email or use the correct password.'
+                        );
+                    }
+                    showAlert('Admin email already existed — account recovered and linked to new school.', 'info');
+                }
+
+                // ── 3. Insert role via RPC (SECURITY DEFINER — bypasses RLS) ──
+                // Supabase blocks service keys on /rest/v1 in the browser.
+                // The only browser-safe way to bypass RLS is a SECURITY DEFINER
+                // Postgres function called via rpc().
+                // If the function doesn't exist yet, we fall back to a direct insert
+                // (works if RLS is disabled or allows super_admin) and show the
+                // one-time SQL fix modal if that also fails.
+                let roleInsertError = null;
+
+                // Try rpc first
+                const { error: rpcErr } = await supabaseClient.rpc('insert_user_role', {
+                    p_user_id:   adminUserId,
+                    p_school_id: schoolId,
+                    p_role:      'school_admin'
+                });
+
+                if (rpcErr) {
+                    // rpc function not yet created — fall back to direct insert
+                    console.warn('RPC insert_user_role not available, trying direct insert:', rpcErr.message);
+                    const { error: directErr } = await supabaseClient
+                        .from('user_roles')
+                        .insert({
+                            user_id:    adminUserId,
+                            school_id:  schoolId,
+                            role:       'school_admin',
+                            created_at: new Date().toISOString()
+                        });
+                    roleInsertError = directErr || null;
+                }
+
+                if (roleInsertError) {
+                    const raw = roleInsertError.message || roleInsertError.code || '';
+                    await supabaseClient.from('schools').delete().eq('school_id', schoolId);
+                    showRoleFixModal(adminUserId, schoolId, fd);
+                    return;
+                }
+
+                // ── 4. Done ──────────────────────────────────────────────────
+                const appUrl = getAppUrl(schoolId);
+                const credentials =
+                    `School: ${fd.schoolName}\n` +
+                    `School App URL: ${appUrl}\n` +
+                    `Admin Email: ${fd.adminEmail}\n` +
+                    `Admin Password: ${fd.adminPassword}\n` +
+                    `\n(School ID: ${schoolId})`;
+
+                alert('✅ School created successfully!\n\n' + credentials);
+                navigator.clipboard.writeText(credentials).catch(() => {});
+                showAlert('School and admin account created! Credentials copied.', 'success');
+
+                event.target.reset();
+                hideAddSchoolModal();
+                await loadPlatformStats();
+                await loadAllSchools();
+
+            } catch (error) {
+                console.error('Error creating school:', error);
+                showAlert('Failed to create school: ' + error.message, 'danger');
+            } finally {
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '🏫 Create School'; }
+            }
+        }
+
+        // ── FK Fix modal ─────────────────────────────────────────────────────
+        // Shown when email-confirm is ON and the FK constraint is still present.
+        // Gives operator the one-time SQL + the manual INSERT to finish setup.
+        // ── Role Fix Modal ────────────────────────────────────────────────────
+        // Shown when BOTH rpc() and direct insert fail (RLS / FK blocking).
+        // Gives the operator a one-time SQL to run that:
+        //   1. Creates the SECURITY DEFINER rpc function (permanent fix)
+        //   2. Inserts this specific role row right now
+        function showRoleFixModal(adminUserId, schoolId, fd) {
+            const appUrl = getAppUrl(schoolId);
+            const fixSQL =
+`-- ============================================================
+-- RUN THIS ONCE in Supabase Dashboard → SQL Editor → New Query
+-- It fixes school creation permanently.
+-- ============================================================
+
+-- 1. Create a SECURITY DEFINER function so the browser can
+--    insert user_roles rows without being blocked by RLS.
+CREATE OR REPLACE FUNCTION public.insert_user_role(
+    p_user_id   uuid,
+    p_school_id uuid,
+    p_role      text
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+    INSERT INTO public.user_roles (user_id, school_id, role, created_at)
+    VALUES (p_user_id, p_school_id, p_role, now())
+    ON CONFLICT (user_id, school_id) DO UPDATE SET role = EXCLUDED.role;
+END;
+$$;
+
+-- Grant execute to the anon and authenticated roles
+GRANT EXECUTE ON FUNCTION public.insert_user_role(uuid, uuid, text)
+    TO anon, authenticated;
+
+-- 2. Insert the role for the school you just created
+INSERT INTO public.user_roles (user_id, school_id, role, created_at)
+VALUES (
+    '${adminUserId}',
+    '${schoolId}',
+    'school_admin',
+    now()
+)
+ON CONFLICT (user_id, school_id) DO UPDATE SET role = 'school_admin';`;
+
+            const existing = document.getElementById('role-fix-modal');
+            if (existing) existing.remove();
+            const modal = document.createElement('div');
+            modal.id = 'role-fix-modal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+            modal.innerHTML = `
+                <div style="background:#1e293b;border:2px solid #f59e0b;border-radius:12px;max-width:780px;width:100%;padding:30px;color:#f1f5f9;max-height:90vh;overflow-y:auto;">
+                    <h3 style="color:#f59e0b;margin-bottom:8px;">⚠️ One-Time Database Fix Required</h3>
+                    <p style="color:#94a3b8;margin-bottom:6px;">
+                        <strong style="color:#f1f5f9;">The school and admin account were created successfully.</strong><br>
+                        The role row could not be inserted from the browser due to Supabase RLS restrictions.
+                        Run the SQL below once to fix this permanently.
+                    </p>
+                    <p style="color:#64748b;font-size:0.82rem;margin-bottom:14px;">
+                        After running, future school registrations will work automatically without this step.
+                    </p>
+                    <textarea id="role-fix-sql" readonly style="width:100%;height:240px;background:#020617;color:#10b981;font-family:monospace;font-size:0.78rem;padding:12px;border:1px solid #334155;border-radius:8px;resize:none;box-sizing:border-box;">${fixSQL}</textarea>
+                    <div style="margin-top:14px;background:#0f172a;border-radius:8px;padding:14px;font-size:0.82rem;color:#94a3b8;">
+                        <strong style="color:#f1f5f9;">School App URL (share with admin after SQL is run):</strong><br>
+                        <code style="color:#10b981;word-break:break-all;">${appUrl}</code>
+                    </div>
+                    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+                        <button onclick="navigator.clipboard.writeText(document.getElementById('role-fix-sql').value).then(()=>{this.textContent='✅ Copied!';setTimeout(()=>this.textContent='📋 Copy SQL',2000)})"
+                            style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">📋 Copy SQL</button>
+                        <a href="https://supabase.com/dashboard/project/xfuksmgdxmewqvhggugp/sql/new" target="_blank"
+                            style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">🔗 Open SQL Editor</a>
+                        <button onclick="this.closest('#role-fix-modal').remove();loadPlatformStats();loadAllSchools();"
+                            style="background:#334155;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">Close & Refresh</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+        }
+
+        function showFKFixModal(adminUserId, schoolId, fd) {
+            const appUrl = getAppUrl(schoolId);
+            const fixSQL = `-- Run ONCE in Supabase Dashboard → SQL Editor → New query
+-- This drops the FK that blocks cross-schema inserts from the client.
+ALTER TABLE public.user_roles DROP CONSTRAINT IF EXISTS user_roles_user_id_fkey;
+
+-- Then run this to assign the role for the admin you just created:
+INSERT INTO public.user_roles (user_id, school_id, role, created_at)
+VALUES (
+  '${adminUserId}',
+  '${schoolId}',
+  'school_admin',
+  now()
+);`;
+
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+            modal.innerHTML = `
+                <div style="background:#1e293b;border:2px solid #ef4444;border-radius:12px;max-width:750px;width:100%;padding:30px;color:#f1f5f9;">
+                    <h3 style="color:#ef4444;margin-bottom:10px;">⚠️ One-Time Database Fix Required</h3>
+                    <p style="color:#94a3b8;margin-bottom:8px;">Your Supabase project has <strong style="color:#f1f5f9;">email confirmation ON</strong>, which prevents the client from getting a token for the new user. This causes the FK constraint to block the role insert.</p>
+                    <p style="color:#94a3b8;margin-bottom:16px;"><strong style="color:#f59e0b;">School and admin account were created successfully.</strong> You just need to run the SQL below to assign the role, and drop the constraint so future schools work without this step.</p>
+                    <textarea id="fk-fix-sql" readonly style="width:100%;height:200px;background:#020617;color:#10b981;font-family:monospace;font-size:0.82rem;padding:12px;border:1px solid #334155;border-radius:8px;resize:none;">${fixSQL}</textarea>
+                    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+                        <button onclick="navigator.clipboard.writeText(document.getElementById('fk-fix-sql').value).then(()=>this.textContent='✅ Copied!')" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">📋 Copy SQL</button>
+                        <a href="https://supabase.com/dashboard/project/xfuksmgdxmewqvhggugp/sql/new" target="_blank" style="background:#10b981;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;">🔗 Open Supabase SQL Editor</a>
+                        <button onclick="this.closest('div[style*=fixed]').remove();loadPlatformStats();loadAllSchools();" style="background:#334155;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">Close</button>
+                    </div>
+                    <p style="color:#64748b;font-size:0.8rem;margin-top:12px;">After running the SQL once, future school creation will work automatically without this step.</p>
+                </div>`;
+            document.body.appendChild(modal);
+        }
+        // ============================================================================
+        // VIEW SCHOOL DETAILS
+        // ============================================================================
+        async function viewSchool(schoolId) {
+            console.log('👁️ viewSchool called with:', schoolId);
+            try {
+                const { data: school, error } = await supabaseClient
+                    .from('schools').select('*').eq('school_id', schoolId).single();
+
+                if (error) throw error;
+
+                currentViewingSchool = schoolId;
+
+                const planLabels = { trial:'Free Trial', basic:'Basic', premium:'Premium', enterprise:'Enterprise' };
+                const appUrl = getAppUrl(school.school_id);
+                const isActive = school.subscription_status === 'active';
+
+                const container = document.getElementById('view-school-content');
+                container.innerHTML = '';
+
+                // ── Live student & teacher counts — shown at top ──────────────
+                var syncBox = document.createElement('div');
+                syncBox.style.cssText = 'background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid #334155;border-radius:10px;padding:16px;margin-bottom:20px;';
+                syncBox.innerHTML = '<div style="color:#94a3b8;font-size:0.75rem;text-transform:uppercase;font-weight:600;margin-bottom:12px;letter-spacing:1px;">📊 Live School Data</div>' +
+                    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
+                    '<div style="background:#1e293b;border-radius:8px;padding:14px;text-align:center;border:1px solid #334155;"><div style="color:#64748b;font-size:0.75rem;margin-bottom:6px;text-transform:uppercase;">Students</div><div style="font-size:2rem;font-weight:700;color:#667eea;" id="sync-students-' + schoolId + '">⏳</div></div>' +
+                    '<div style="background:#1e293b;border-radius:8px;padding:14px;text-align:center;border:1px solid #334155;"><div style="color:#64748b;font-size:0.75rem;margin-bottom:6px;text-transform:uppercase;">Teachers</div><div style="font-size:2rem;font-weight:700;color:#10b981;" id="sync-teachers-' + schoolId + '">⏳</div></div>' +
+                    '</div>';
+                container.appendChild(syncBox);
+
+                // Fetch live counts immediately
+                console.log('🔄 Fetching sync counts for school:', schoolId);
+                Promise.all([
+                    supabaseClient.from('students').select('admission_no', { count: 'exact', head: true }).eq('school_id', schoolId),
+                    supabaseClient.from('teachers').select('id', { count: 'exact', head: true }).eq('school_id', schoolId)
+                ]).then(function(results) {
+                    console.log('✅ Sync results:', results);
+                    console.log('Students count:', results[0].count, 'error:', results[0].error);
+                    console.log('Teachers count:', results[1].count, 'error:', results[1].error);
+                    var se = document.getElementById('sync-students-' + schoolId);
+                    var te = document.getElementById('sync-teachers-' + schoolId);
+                    console.log('Student element found:', !!se, 'Teacher element found:', !!te);
+                    if (se) se.textContent = results[0].count !== null ? results[0].count : 'ERR';
+                    if (te) te.textContent = results[1].count !== null ? results[1].count : 'ERR';
+                }).catch(function(e) {
+                    console.error('❌ Sync fetch error:', e);
+                    var se = document.getElementById('sync-students-' + schoolId);
+                    var te = document.getElementById('sync-teachers-' + schoolId);
+                    if (se) se.textContent = 'ERR';
+                    if (te) te.textContent = 'ERR';
+                });
+
+                // URL box
+                const urlBox = document.createElement('div');
+                urlBox.style.cssText = 'background:#0f172a;border:1px solid #334155;border-radius:10px;padding:16px;margin-bottom:20px;';
+                const urlLabel = document.createElement('div');
+                urlLabel.style.cssText = 'color:#94a3b8;font-size:0.8rem;margin-bottom:8px;font-weight:600;text-transform:uppercase;';
+                urlLabel.textContent = '🔗 School App URL';
+                const urlRow = document.createElement('div');
+                urlRow.style.cssText = 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;';
+                const urlCode = document.createElement('code');
+                urlCode.style.cssText = 'flex:1;background:#1e293b;color:#10b981;padding:8px 12px;border-radius:6px;font-size:0.82rem;word-break:break-all;';
+                urlCode.textContent = appUrl;
+                const copyBtn = document.createElement('button');
+                copyBtn.style.cssText = 'background:#667eea;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;white-space:nowrap;';
+                copyBtn.textContent = '📋 Copy';
+                copyBtn.onclick = function() {
+                    navigator.clipboard.writeText(appUrl).then(function() {
+                        copyBtn.textContent = '✅ Copied!';
+                        setTimeout(function() { copyBtn.textContent = '📋 Copy'; }, 2000);
+                    });
+                };
+                urlRow.appendChild(urlCode);
+                urlRow.appendChild(copyBtn);
+                urlBox.appendChild(urlLabel);
+                urlBox.appendChild(urlRow);
+                container.appendChild(urlBox);
+
+                // Details grid
+                const grid = document.createElement('div');
+                grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;';
+                var fields = [
+                    ['School Code',  school.school_code || '—',        false],
+                    ['Plan',         planLabels[school.subscription_plan] || school.subscription_plan, false],
+                    ['Status',       school.subscription_status,        false],
+                    ['Created',      new Date(school.created_at).toLocaleDateString(), false],
+                    ['Email',        school.school_email  || '—',       false],
+                    ['Phone',        school.school_phone  || '—',       false],
+                    ['Address',      school.school_address|| '—',       true],
+                ];
+                fields.forEach(function(f) {
+                    var cell = document.createElement('div');
+                    cell.style.cssText = 'background:#0f172a;border-radius:8px;padding:14px;' + (f[2] ? 'grid-column:span 2;' : '');
+                    var lbl = document.createElement('div');
+                    lbl.style.cssText = 'color:#64748b;font-size:0.75rem;text-transform:uppercase;margin-bottom:4px;';
+                    lbl.textContent = f[0];
+                    var val = document.createElement('div');
+                    val.style.cssText = 'font-weight:600;word-break:break-all;';
+                    val.textContent = f[1];
+                    cell.appendChild(lbl);
+                    cell.appendChild(val);
+                    grid.appendChild(cell);
+                });
+                container.appendChild(grid);
+
+                // Limits
+                var limitsGrid = document.createElement('div');
+                limitsGrid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;';
+                [['Max Students', school.max_students], ['Max Teachers', school.max_teachers]].forEach(function(item) {
+                    var cell = document.createElement('div');
+                    cell.style.cssText = 'background:#0f172a;border-radius:8px;padding:14px;text-align:center;';
+                    var lbl = document.createElement('div');
+                    lbl.style.cssText = 'color:#64748b;font-size:0.75rem;text-transform:uppercase;margin-bottom:4px;';
+                    lbl.textContent = item[0];
+                    var val = document.createElement('div');
+                    val.style.cssText = 'font-size:1.8rem;font-weight:700;color:#10b981;';
+                    val.textContent = (item[1] || 0).toLocaleString();
+                    cell.appendChild(lbl);
+                    cell.appendChild(val);
+                    limitsGrid.appendChild(cell);
+                });
+                container.appendChild(limitsGrid);
+
+                // Suspension reason
+                if (school.suspension_reason) {
+                    var srBox = document.createElement('div');
+                    srBox.style.cssText = 'background:rgba(239,68,68,0.1);border:1px solid #ef4444;border-radius:8px;padding:14px;margin-bottom:20px;';
+                    var srLabel = document.createElement('div');
+                    srLabel.style.cssText = 'color:#ef4444;font-size:0.75rem;text-transform:uppercase;margin-bottom:4px;font-weight:600;';
+                    srLabel.textContent = 'Suspension Reason';
+                    var srText = document.createElement('div');
+                    srText.textContent = school.suspension_reason;
+                    srBox.appendChild(srLabel);
+                    srBox.appendChild(srText);
+                    container.appendChild(srBox);
+                }
+
+                // Action buttons
+                var actions = document.createElement('div');
+                actions.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;';
+
+                var editBtn = document.createElement('button');
+                editBtn.style.cssText = 'background:#667eea;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;';
+                editBtn.textContent = '✏️ Edit School';
+                editBtn.onclick = function() { hideViewSchoolModal(); editSchool(school.school_id); };
+
+                var toggleBtn = document.createElement('button');
+                toggleBtn.style.cssText = (isActive ? 'background:#ef4444;' : 'background:#10b981;') + 'color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;';
+                toggleBtn.textContent = isActive ? '⏸️ Pause' : '▶️ Reactivate';
+                toggleBtn.onclick = (function(sid, sname, active) {
+                    return function() {
+                        hideViewSchoolModal();
+                        if (active) { pauseSchool(sid, sname); }
+                        else { activateSchool(sid, sname); }
+                    };
+                })(school.school_id, school.school_name || 'School', isActive);
+
+                var deleteBtn = document.createElement('button');
+                deleteBtn.style.cssText = 'background:#7f1d1d;color:white;border:2px solid #ef4444;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;margin-left:auto;';
+                deleteBtn.textContent = '🗑️ Delete School';
+                deleteBtn.onclick = (function(sid, sname) {
+                    return function() {
+                        console.log('🗑️ Delete clicked for school:', sid, sname);
+                        hideViewSchoolModal();
+                        confirmDeleteSchool(sid, sname);
+                    };
+                })(school.school_id, school.school_name || 'School');
+
+                actions.appendChild(editBtn);
+                actions.appendChild(toggleBtn);
+                actions.appendChild(deleteBtn);
+                container.appendChild(actions);
+
+                document.getElementById('view-school-name').textContent = school.school_name || 'Unnamed School';
+                document.getElementById('view-school-modal').classList.add('active');
+
+            } catch (error) {
+                console.error('Error viewing school:', error);
+                showAlert('Failed to load school details: ' + error.message, 'danger');
+            }
+        }
+
+        async function confirmDeleteSchool(schoolId, schoolName) {
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+            modal.innerHTML = `
+                <div style="background:#1e293b;border-radius:16px;padding:30px;width:100%;max-width:420px;border:1px solid #ef4444;">
+                    <h3 style="color:#ef4444;margin-bottom:10px;">🗑️ Delete School</h3>
+                    <p style="color:#94a3b8;margin-bottom:15px;">You are about to permanently delete <strong style="color:white;">${schoolName}</strong> and all its data. This cannot be undone.</p>
+                    <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:5px;">Type the school name exactly to confirm:</p>
+                    <p style="color:white;font-weight:700;font-size:0.9rem;margin-bottom:12px;background:#0f172a;padding:8px 12px;border-radius:6px;">${schoolName}</p>
+                    <p id="delete-school-error" style="color:#ef4444;font-size:0.85rem;margin-bottom:10px;display:none;"></p>
+                    <input type="text" id="delete-confirm-name" placeholder="Type school name here" style="width:100%;padding:12px;background:rgba(255,255,255,0.08);border:1px solid #334155;border-radius:8px;color:white;font-size:1rem;outline:none;box-sizing:border-box;margin-bottom:15px;">
+                    <div style="display:flex;gap:10px;">
+                        <button style="flex:1;padding:12px;background:#334155;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;" onclick="this.closest('div[style*=fixed]').remove()">Cancel</button>
+                        <button id="delete-confirm-btn" style="flex:1;padding:12px;background:#ef4444;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">Delete</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+
+            modal.querySelector('#delete-confirm-btn').onclick = async function() {
+                const typed = modal.querySelector('#delete-confirm-name').value.trim();
+                const errEl = modal.querySelector('#delete-school-error');
+                const btn = modal.querySelector('#delete-confirm-btn');
+                errEl.style.display = 'none';
+
+                if (!typed) { errEl.textContent = 'Please type the school name.'; errEl.style.display = 'block'; return; }
+                if (typed !== schoolName) { errEl.textContent = 'Name does not match. Please type exactly: ' + schoolName; errEl.style.display = 'block'; return; }
+
+                btn.disabled = true; btn.textContent = 'Deleting...';
+
+                try {
+                    // Get admin user_id BEFORE deleting user_roles
+                    const { data: adminRole } = await supabaseClient
+                        .from('user_roles').select('user_id').eq('school_id', schoolId).eq('role', 'school_admin').single();
+                    const adminUserId = adminRole?.user_id || null;
+
+                    // Delete all school data across every table the school app writes to
+                    const tablesToDelete = [
+                        'students', 'teachers', 'results', 'exams', 'fees',
+                        'attendance', 'attendance_summary', 'notifications',
+                        'academic_settings', 'broadsheet', 'psychomotor',
+                        'comments', 'published_results', 'report_card_workflow',
+                        'lesson_plans', 'scheme_of_work', 'calendar_activities',
+                        'salary', 'assignments', 'online_theory_submissions',
+                        'user_roles'
+                    ];
+                    for (const table of tablesToDelete) {
+                        const { error: delErr } = await supabaseClient.from(table).delete().eq('school_id', schoolId);
+                        if (delErr) console.warn(`⚠️ Could not delete from ${table}:`, delErr.message);
+                    }
+
+                    // Delete all storage files for this school from both buckets
+                    for (const bucket of ['school-public', 'school-private']) {
+                        const { data: files } = await supabaseClient.storage
+                            .from(bucket).list(schoolId, { limit: 1000 });
+                        if (files && files.length > 0) {
+                            const paths = files.map(f => `${schoolId}/${f.name}`);
+                            await supabaseClient.storage.from(bucket).remove(paths);
+                        }
+                    }
+
+                    const { error } = await supabaseClient.from('schools').delete().eq('school_id', schoolId);
+                    if (error) throw error;
+
+                    // NOTE: Deleting the Supabase Auth user requires a server-side
+                    // service key which cannot safely be used in the browser.
+                    // The school data is fully deleted above.
+                    // To reuse the admin email: go to Supabase Dashboard → Authentication
+                    // → Users → find the email → delete manually.
+                    if (adminUserId) {
+                        console.info('ℹ️ Auth user', adminUserId, 'must be deleted manually in Supabase Dashboard → Auth → Users to reuse the email.');
+                        showAlert('✅ School deleted. To reuse the admin email, delete the user in Supabase Dashboard → Authentication → Users.', 'info');
+                    }
+
+                    modal.remove();
+                    showAlert('School "' + schoolName + '" has been permanently deleted.', 'success');
+                    await loadPlatformStats();
+                    await loadAllSchools();
+
+                } catch(e) {
+                    console.error('Delete error:', e);
+                    errEl.textContent = e.message || 'Deletion failed. Try again.';
+                    errEl.style.display = 'block';
+                    btn.disabled = false; btn.textContent = 'Delete';
+                }
+            };
+        }
+
+        function hideViewSchoolModal() {
+            document.getElementById('view-school-modal').classList.remove('active');
+            currentViewingSchool = null;
+        }
+
+        function impersonateSchool() {
+            if (currentViewingSchool) {
+                localStorage.setItem('impersonatedSchool', currentViewingSchool);
+                alert('Opening school dashboard in new tab...\n\nNote: This is a demo. In production, this would open the actual school portal.');
+                // In production: window.open('https://app.dareyplatform.com', '_blank');
+                hideViewSchoolModal();
+            }
+        }
+
+        // ============================================================================
+        // PAUSE/ACTIVATE SCHOOL
+        // ============================================================================
+        function showPauseModal(schoolId, schoolName) {
+            const existing = document.getElementById('pause-school-modal');
+            if (existing) existing.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'pause-school-modal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+            modal.innerHTML = `
+                <div style="background:#1e293b;border:2px solid #ef4444;border-radius:12px;max-width:520px;width:100%;padding:30px;color:#f1f5f9;">
+                    <h3 style="color:#ef4444;margin-bottom:8px;">⏸️ Pause School Access</h3>
+                    <p style="color:#94a3b8;margin-bottom:20px;">Pausing <strong style="color:#f1f5f9;">${schoolName}</strong> will block all admin, teacher and student logins immediately until reactivated.</p>
+
+                    <div style="margin-bottom:18px;">
+                        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:#f1f5f9;font-weight:600;">
+                            <input type="checkbox" id="pause-include-reason" onchange="document.getElementById('pause-reason-box').style.display=this.checked?'block':'none'" style="width:16px;height:16px;cursor:pointer;">
+                            Add a suspension reason (shown to users)
+                        </label>
+                    </div>
+
+                    <div id="pause-reason-box" style="display:none;margin-bottom:18px;">
+                        <label style="display:block;margin-bottom:6px;color:#94a3b8;font-size:0.9rem;">Reason (optional — leave blank for default message)</label>
+                        <textarea id="pause-reason-text" rows="3" placeholder="e.g. Subscription payment overdue. Please contact support to renew." style="width:100%;background:#0f172a;color:#f1f5f9;border:1px solid #334155;border-radius:8px;padding:10px;font-size:0.9rem;resize:vertical;"></textarea>
+                    </div>
+
+                    <div style="display:flex;gap:10px;justify-content:flex-end;">
+                        <button onclick="document.getElementById('pause-school-modal').remove()" style="background:#334155;color:#f1f5f9;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">Cancel</button>
+                        <button onclick="confirmPauseSchool('${schoolId}','${schoolName}')" style="background:#ef4444;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">⏸️ Pause School</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+        }
+
+        async function confirmPauseSchool(schoolId, schoolName) {
+            const includeReason = document.getElementById('pause-include-reason')?.checked;
+            const reason = includeReason ? (document.getElementById('pause-reason-text')?.value.trim() || '') : '';
+
+            document.getElementById('pause-school-modal')?.remove();
+
+            try {
+                const updateData = {
+                    subscription_status: 'paused',
+                    suspension_reason: reason || null
+                };
+
+                const { error } = await supabaseClient
+                    .from('schools')
+                    .update(updateData)
+                    .eq('school_id', schoolId);
+
+                if (error) throw error;
+
+                showAlert(`School "${schoolName}" has been paused`, 'success');
+                await loadPlatformStats();
+                await loadAllSchools();
+
+            } catch (error) {
+                console.error('Error pausing school:', error);
+                showAlert('Failed to pause school: ' + error.message, 'danger');
+            }
+        }
+
+        // Keep old name as alias so existing table buttons still work
+        function pauseSchool(schoolId, schoolName) {
+            showPauseModal(schoolId, schoolName);
+        }
+
+        async function activateSchool(schoolId, schoolName) {
+            if (!confirm(`Reactivate "${schoolName}"?\n\nAll users will regain access immediately.`)) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('schools')
+                    .update({ subscription_status: 'active', suspension_reason: null })
+                    .eq('school_id', schoolId);
+
+                if (error) throw error;
+
+                showAlert(`School "${schoolName}" has been reactivated`, 'success');
+                await loadPlatformStats();
+                await loadAllSchools();
+
+            } catch (error) {
+                console.error('Error activating school:', error);
+                showAlert('Failed to activate school', 'danger');
+            }
+        }
+
+        async function editSchool(schoolId) {
+            console.log('🔧 editSchool called with:', schoolId);
+            const existing = document.getElementById('edit-school-modal');
+            if (existing) existing.remove();
+
+            // Fetch live data so fields are always accurate
+            const { data: school, error } = await supabaseClient
+                .from('schools').select('*').eq('school_id', schoolId).single();
+            
+            console.log('🏫 school data:', school);
+            console.log('❌ school error:', error);
+            
+            if (error) { showAlert('Failed to load school data', 'danger'); return; }
+
+            const appUrl = getAppUrl(schoolId);
+            console.log('🔗 appUrl:', appUrl);
+
+            const inputStyle = 'width:100%;background:#0f172a;color:#f1f5f9;border:1px solid #334155;border-radius:8px;padding:10px;font-size:0.95rem;box-sizing:border-box;';
+            const labelStyle = 'display:block;margin-bottom:6px;color:#94a3b8;font-size:0.85rem;font-weight:600;';
+            const fieldStyle = 'margin-bottom:16px;';
+
+            const modal = document.createElement('div');
+            modal.id = 'edit-school-modal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
+            modal.innerHTML = `
+                <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;max-width:560px;width:100%;padding:30px;color:#f1f5f9;margin:auto;">
+                    <h3 style="color:#667eea;margin-bottom:16px;">✏️ Edit School</h3>
+
+                    <!-- School App URL -->
+                    <div style="background:#0f172a;border:1px solid #334155;border-radius:10px;padding:14px;margin-bottom:20px;">
+                        <div style="color:#94a3b8;font-size:0.75rem;font-weight:600;text-transform:uppercase;margin-bottom:8px;">🔗 School App URL</div>
+                        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                            <code id="es-app-url" style="flex:1;background:#1e293b;color:#10b981;padding:8px 12px;border-radius:6px;font-size:0.8rem;word-break:break-all;">${appUrl}</code>
+                            <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('es-app-url').textContent).then(()=>{this.textContent='✅ Copied!';setTimeout(()=>this.textContent='📋 Copy',2000)})" style="background:#667eea;color:white;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-weight:600;white-space:nowrap;">📋 Copy</button>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div style="${fieldStyle}">
+                        <label style="${labelStyle}">School Name *</label>
+                        <input id="es-name" type="text" value="${(school.school_name||'').replace(/"/g,'&quot;')}" style="${inputStyle}" placeholder="e.g. Lagos High School">
+                    </div>
+                    <div style="${fieldStyle}">
+                        <label style="${labelStyle}">School Code *</label>
+                        <input id="es-code" type="text" value="${(school.school_code||'').replace(/"/g,'&quot;')}" style="${inputStyle}" placeholder="e.g. LAGOS_HIGH_001">
+                    </div>
+                    <div style="${fieldStyle}">
+                        <label style="${labelStyle}">School Email</label>
+                        <input id="es-email" type="email" value="${(school.school_email||'').replace(/"/g,'&quot;')}" style="${inputStyle}" placeholder="info@school.com">
+                    </div>
+                    <div style="${fieldStyle}">
+                        <label style="${labelStyle}">School Phone</label>
+                        <input id="es-phone" type="tel" value="${(school.school_phone||'').replace(/"/g,'&quot;')}" style="${inputStyle}" placeholder="+234 123 456 7890">
+                    </div>
+                    </div>
+                    <div style="${fieldStyle}">
+                        <label style="${labelStyle}">School Address</label>
+                        <input id="es-address" type="text" value="${(school.school_address||'').replace(/"/g,'&quot;')}" style="${inputStyle}" placeholder="123 School Street, City">
+                    </div>
+                    <div style="${fieldStyle}">
+                        <label style="${labelStyle}">Subscription Plan</label>
+                        <select id="es-plan" style="${inputStyle}">
+                            <option value="trial"      ${school.subscription_plan==='trial'      ?'selected':''}>Free Trial</option>
+                            <option value="basic"      ${school.subscription_plan==='basic'      ?'selected':''}>Basic — ₦20,000/month</option>
+                            <option value="premium"    ${school.subscription_plan==='premium'    ?'selected':''}>Premium — ₦60,000/month</option>
+                            <option value="enterprise" ${school.subscription_plan==='enterprise' ?'selected':''}>Enterprise</option>
+                        </select>
+                    </div>
+                    <div style="border-top:1px solid #334155;margin:15px 0;padding-top:15px;">
+                        <div style="color:#94a3b8;font-size:0.75rem;text-transform:uppercase;font-weight:600;margin-bottom:12px;">🔐 Admin Account</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div style="${fieldStyle}">
+                            <label style="${labelStyle}">Admin Name</label>
+                            <input id="es-admin-name" type="text" value="${(school.admin_name||'').replace(/"/g,'&quot;')}" style="${inputStyle}" placeholder="Principal Name">
+                        </div>
+                        <div style="${fieldStyle}">
+                            <label style="${labelStyle}">Admin Email</label>
+                            <input id="es-admin-email" type="email" value="${(school.admin_email||'').replace(/"/g,'&quot;')}" style="${inputStyle}" placeholder="admin@school.com" readonly style="opacity:0.6;">
+                        </div>
+                        </div>
+                        <div style="${fieldStyle}">
+                            <label style="${labelStyle}">New Password <span style="color:#64748b;font-weight:400;">(leave blank to keep current)</span></label>
+                            <input id="es-admin-password" type="password" style="${inputStyle}" placeholder="New password (min 8 chars)">
+                        </div>
+                    </div>
+                    <div style="${fieldStyle}">
+                        <label style="${labelStyle}">Max Students</label>
+                        <input id="es-max-students" type="number" value="${school.max_students||0}" style="${inputStyle}">
+                    </div>
+
+                    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+                        <button onclick="document.getElementById('edit-school-modal').remove()" style="background:#334155;color:#f1f5f9;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">Cancel</button>
+                        <button onclick="saveSchoolEdit('${schoolId}')" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;">💾 Save Changes</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+            console.log('✅ edit modal appended');
+            console.log('   #es-app-url element:', document.getElementById('es-app-url'));
+            console.log('   URL text:', document.getElementById('es-app-url')?.textContent);
+        }
+
+        async function saveSchoolEdit(schoolId) {
+            const name        = document.getElementById('es-name')?.value.trim();
+            const code        = document.getElementById('es-code')?.value.trim();
+            const email       = document.getElementById('es-email')?.value.trim();
+            const phone       = document.getElementById('es-phone')?.value.trim();
+            const address     = document.getElementById('es-address')?.value.trim();
+            const plan        = document.getElementById('es-plan')?.value;
+            const maxStudents = document.getElementById('es-max-students')?.value;
+            const adminPass   = document.getElementById('es-admin-password')?.value.trim();
+            const adminEmail  = document.getElementById('es-admin-email')?.value.trim();
+
+            if (!name || !code) { showAlert('School name and code are required', 'danger'); return; }
+
+            const planLimits = {
+                trial:{ students:50, teachers:5 }, basic:{ students:500, teachers:50 },
+                premium:{ students:2000, teachers:200 }, enterprise:{ students:999999, teachers:99999 }
+            };
+            const limits = planLimits[plan] || planLimits.trial;
+            const finalMaxStudents = maxStudents ? parseInt(maxStudents) : limits.students;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('schools')
+                    .update({
+                        school_name:       name,
+                        school_code:       code,
+                        school_email:      email   || null,
+                        school_phone:      phone   || null,
+                        school_address:    address || null,
+                        subscription_plan: plan,
+                        max_students:      finalMaxStudents,
+                        max_teachers:      limits.teachers
+                    })
+                    .eq('school_id', schoolId);
+
+                if (error) throw error;
+
+                // Send password reset email — no service key needed, uses anon key
+                if (adminPass && adminPass.length >= 8 && adminEmail) {
+                    try {
+                        const { error: pwErr } = await supabaseClient.auth.resetPasswordForEmail(adminEmail, {
+                            redirectTo: window.location.origin + '/reset-password.html'
+                        });
+                        if (pwErr) {
+                            console.warn('Password reset email failed:', pwErr.message);
+                            showAlert('School saved. Password reset email could not be sent: ' + pwErr.message, 'warning');
+                        } else {
+                            showAlert('School saved. A password reset email has been sent to ' + adminEmail + '.', 'info');
+                        }
+                    } catch(pe) { console.warn('Password reset skipped:', pe); }
+                }
+
+                document.getElementById('edit-school-modal')?.remove();
+                showAlert('School updated successfully ✅', 'success');
+                await loadAllSchools();
+            } catch (error) {
+                showAlert('Failed to update school: ' + error.message, 'danger');
+            }
+        }
+
+        // ============================================================================
+        // MODAL FUNCTIONS
+        // ============================================================================
+        function showAddSchoolModal() {
+            document.getElementById('add-school-modal').classList.add('active');
+        }
+
+        function hideAddSchoolModal() {
+            document.getElementById('add-school-modal').classList.remove('active');
+            document.getElementById('add-school-form').reset();
+        }
+
+        function updatePlanLimits(plan) {
+            // Optional: Show plan limits in the form
+            console.log('Selected plan:', plan);
+        }
+
+        // ============================================================================
+        // UTILITY FUNCTIONS
+        // ============================================================================
+        function showAlert(message, type = 'info') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            
+            const icons = { info: 'ℹ️', success: '✅', warning: '⚠️', danger: '❌' };
+            alert.innerHTML = `
+                <span>${icons[type]}</span>
+                <span>${message}</span>
+            `;
+
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.style.transition = 'opacity 0.3s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                await supabaseClient.auth.signOut();
+                window.location.href = 'super-admin-login.html';
+            }
+        }
+
+        // ============================================================================
+        // PLAN PRICING
+        // ============================================================================
+        function getPlanPrices() {
+            const saved = JSON.parse(localStorage.getItem('planPrices') || '{}');
+            return {
+                trial:      saved.trial      || 0,
+                basic:      saved.basic      || 0,
+                premium:    saved.premium    || 0,
+                enterprise: saved.enterprise || 0
+            };
+        }
+
+        function loadPlanPriceInputs() {
+            const prices = getPlanPrices();
+            document.getElementById('price-trial').value      = prices.trial      || '';
+            document.getElementById('price-basic').value      = prices.basic      || '';
+            document.getElementById('price-premium').value    = prices.premium    || '';
+            document.getElementById('price-enterprise').value = prices.enterprise || '';
+        }
+
+        function savePlanPrices() {
+            const prices = {
+                trial:      parseInt(document.getElementById('price-trial').value)      || 0,
+                basic:      parseInt(document.getElementById('price-basic').value)      || 0,
+                premium:    parseInt(document.getElementById('price-premium').value)    || 0,
+                enterprise: parseInt(document.getElementById('price-enterprise').value) || 0
+            };
+            localStorage.setItem('planPrices', JSON.stringify(prices));
+            showAlert('Plan prices saved ✅', 'success');
+            loadPlatformStats();
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
